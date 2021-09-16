@@ -1,0 +1,100 @@
+body{
+    background-color: #f5f0e1;
+    color: #1e3d59;
+    font-size: 18px;
+}
+
+#header{
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 35px;
+    color: #ff6e40;
+
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#header::before, #header::after{
+    content: "😎";
+}
+
+#header:hover{
+    text-decoration: underline 5px;
+}
+
+#main-table{
+    margin: auto;
+
+}
+
+#main-table .inner-table{
+    margin-left: 45%;
+
+}
+
+table.wrapper{
+    width: 100%;
+}
+
+#corgi{
+    width: 150px;
+}
+
+#main-form, .center-wrapper{
+    width: 100%;
+    text-align: center;
+}
+
+.center-wrapper{
+    width: 100%;
+    text-align: center;
+}
+
+.inner{
+    width: 50%;
+    margin: 30px auto;
+}
+
+.input-pannel *{
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+p#info-pannel{
+    border: 3px solid #ff6e40;
+    margin: 0 20%;
+    padding: 10px;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 1vw;
+
+    width: 60%;
+    margin: 30px auto;
+}
+
+.grid-container > div {
+    font-size: 1.7vw;
+    padding: 10px;
+    text-align: center;
+    background: #d3c7a3;
+
+    border-radius: 7px;
+}
+
+.grid-container > div.header {
+
+    background: #ff6e40;
+}
+
+@media handheld, (max-width: 1200px) {
+    .grid-container{
+        width: 95%;
+    }
+
+    .grid-container > div {
+        font-size: 5vw;
+    }
+}
