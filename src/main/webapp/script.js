@@ -16,10 +16,10 @@ function isFloat(val){
 }
 
 function validateX() {
-    let yField = $('#x');
-    let yNum = yField.val().replace(',', '.');
-    if (isNumeric(yNum) && isFloat(yNum) && minX <= yNum && yNum <= maxX) {
-        y = yNum;
+    let xField = $('#x');
+    let xNum = xField.val().replace(',', '.');
+    if (isNumeric(xNum) && isFloat(xNum) && minX <= xNum && xNum <= maxX) {
+        x = xNum;
         return true;
     }
     return false;
@@ -48,7 +48,7 @@ function validateR() {
 function validateForm(){
     msg = '';
     if(!validateX()){
-        msg += 'В поле Y должно быть число от -3 до 3 с не более чем пятью знаками после запятой\n';
+        msg += 'В поле X должно быть число от -3 до 3 с не более чем пятью знаками после запятой\n';
     }
     if(!validateY()){
         msg += 'Должно быть выбрано значение поля Y\n';

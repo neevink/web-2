@@ -6,7 +6,6 @@
         <meta charset="utf-8">
         <meta name="author" content="Kirill Neevin">
         <title>Неевин Кирилл</title>
-        <link rel="icon" href="<%=request.getContextPath()%>/img/icon.ico">
         <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/style.css">
     </head>
     <body>
@@ -14,8 +13,53 @@
         Неевин Кирилл P3213, вариант: 521683
     </header>
 
-    <form id="main-form" action="#" method="get" onsubmit="return validateForm()">
-        <img id="corgi" src="<%=request.getContextPath()%>/img/corgi.jpg" alt="*тут картинка с корги*">
+    <div class="area-wrapper">
+        <svg class="area">
+            <!-- 1 четверть -->
+            <polygon fill="#3398fd" fill-opacity="1" points="150,40 260,40 260,150 150,150"></polygon>
+            <!-- 3 четверть -->
+            <polygon fill="#3398fd" fill-opacity="1" points="150,150 95,150 150,205"></polygon>
+            <!-- 4 четверть -->
+            <g transform="translate(150,150) rotate(180 0 0)">
+                <path d="M0 0 -55 0 A 55 55 0 0 1 0 -55" fill="#3398fd"/>
+            </g>
+
+            <!-- Координатные оси -->
+            <line stroke="black" x1="0" x2="300" y1="150" y2="150"></line>
+            <line stroke="black" x1="150" x2="150" y1="0" y2="300"></line>
+
+            <!-- Стрелки -->
+            <polygon fill="black" points="150,1 145,7 155,7" stroke="black"></polygon>
+            <polygon fill="black" points="299,150 293,145 293,155" stroke="black"></polygon>
+
+            <!-- Засечки и подписи -->
+            <text x="160" y="210">-R/2</text>
+            <line x1="148" x2="152" y1="205" y2="205" stroke="black"></line>
+
+            <text x="160" y="265">-R</text>
+            <line x1="148" x2="152" y1="260" y2="260" stroke="black"></line>
+
+            <text x="255" y="143">R</text>
+            <line x1="260" x2="260" y1="148" y2="152" stroke="black"></line>
+
+            <text x="190" y="143">R/2</text>
+            <line x1="205" x2="205" y1="148" y2="152" stroke="black"></line>
+
+            <text x="75" y="143">-R/2</text>
+            <line x1="95" x2="95" y1="148" y2="152" stroke="black"></line>
+
+            <text x="30" y="143">-R</text>
+            <line x1="40" x2="40" y1="148" y2="152" stroke="black"></line>
+
+            <text x="160" y="45">R</text>
+            <line x1="148" x2="152" y1="40" y2="40" stroke="black"></line>
+
+            <text x="160" y="100">R/2</text>
+            <line x1="148" x2="152" y1="95" y2="95" stroke="black"></line>
+        </svg>
+    </div>
+
+    <form id="main-form" action="<%=request.getContextPath()%>/controller" method="get" onsubmit="return validateForm()">
         <table id="main-table">
             <tr>
                 <th>Переменная</th>

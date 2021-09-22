@@ -85,8 +85,19 @@ p#info-pannel{
 }
 
 .grid-container > div.header {
-
     background: #ff6e40;
+}
+
+.area{
+    height: 300px;
+    width: 300px;
+    background-color: white;
+}
+
+.area-wrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 @media handheld, (max-width: 1200px) {
