@@ -1,4 +1,7 @@
+<%@ page import="com.neevin.lab2.models.ResultsModel" %>
+<%@ page import="com.neevin.lab2.models.HitResultModel" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<jsp:useBean id="results" scope="session" class="com.neevin.lab2.models.ResultsModel"/>
 <!DOCTYPE html>
 <html lang="ru">
     <head>
@@ -14,7 +17,7 @@
     </header>
 
     <div class="area-wrapper">
-        <svg class="area">
+        <svg class="area" id="main-area">
             <!-- 1 четверть -->
             <polygon fill="#3398fd" fill-opacity="1" points="150,40 260,40 260,150 150,150"></polygon>
             <!-- 3 четверть -->
@@ -56,6 +59,29 @@
 
             <text x="160" y="100">R/2</text>
             <line x1="148" x2="152" y1="95" y2="95" stroke="black"></line>
+
+            <!-- Рисуем точки -->
+            <%
+                for (HitResultModel result: results.getHits()) {
+
+                String color;
+                if (result.getHit()){
+                    color = "#32CD32";
+                }
+                else{
+                    color = "#DC143C";
+                }
+
+                final int constantRadius = 110;
+                final float x = 150 + result.getX() / result.getR() * constantRadius;
+                final float y = 150 - result.getY() / result.getR() * constantRadius;
+                out.print(String.format(
+                        "<circle r=\"4\" cx=%f cy=%f id=\"pointer\" fill=%s></circle>",
+                        x,
+                        y,
+                        color
+                ));
+            } %>
         </svg>
     </div>
 

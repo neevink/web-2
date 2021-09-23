@@ -1,3 +1,4 @@
+const ADDRESS_URL = 'http://localhost:8081/lab2-1.0-SNAPSHOT/controller';
 const minX = -3, maxX = 3;
 const minY = -5, maxY = 3;
 const minR = 1, maxR = 5;
@@ -26,8 +27,7 @@ function validateX() {
 }
 
 function validateY() {
-    let yField = $('#y');
-    let yNum = yField.val().replace(',', '.');
+    let yNum = $('#y').val();
     if (isNumeric(yNum) && isInt(yNum) && minY <= yNum && yNum <= maxY) {
         y = yNum;
         return true;
@@ -36,8 +36,7 @@ function validateY() {
 }
 
 function validateR() {
-    let rField = $('#r');
-    let rNum = rField.val().replace(',', '.');
+    let rNum = $('#r').val();
     if (isNumeric(rNum) && isInt(rNum) && minR <= rNum && rNum <= maxR) {
         r = rNum;
         return true;
@@ -64,5 +63,29 @@ function validateForm(){
     else{
         // alert('x = ' + x + ', y = ' + y + ',r = ' + r);
         return true;
+    }
+}
+
+document.getElementById("main-area").onmousedown = function submit(event) {
+    const areaSize = 300, radius = 110;
+    const selectedRadius = parseFloat($('#r').val());
+
+    let rowX = ((event.offsetX - areaSize/2) / radius * selectedRadius).toFixed(5);
+    let rowY = Math.round((areaSize/2 - event.offsetY) / radius * selectedRadius);
+
+    if(rowY < minY){
+        rowY = minY;
+    }
+    else if(rowY > maxY){
+        rowY = maxY;
+    }
+
+    $('#x').val(rowX);
+    $('#y').val(rowY);
+
+    // alert(`${rowX} ${rowY}`);
+
+    if(validateForm()){
+        window.location.href = ADDRESS_URL + `?x=${x}&y=${y}&r=${r}`;
     }
 }
