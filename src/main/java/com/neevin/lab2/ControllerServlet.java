@@ -9,6 +9,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 
 @WebServlet(name = "ControllerServlet", value = "/controller")
@@ -44,7 +45,13 @@ public class ControllerServlet extends HttpServlet {
             context.setAttribute("results", results);
 
             // Тут делаем дела с числами
-            getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+            //getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print(String.format("{\"x\": %s, \"y\": %s, \"r\": %s, \"hit\": %s}", hitRes.getX(), hitRes.getY(), hitRes.getR(), hitRes.getHit()));
 
         }
         catch (Exception exc){

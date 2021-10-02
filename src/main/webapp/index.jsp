@@ -76,7 +76,7 @@
                 final float x = 150 + result.getX() / result.getR() * constantRadius;
                 final float y = 150 - result.getY() / result.getR() * constantRadius;
                 out.print(String.format(
-                        "<circle r=\"4\" cx=%f cy=%f id=\"pointer\" fill=%s></circle>",
+                        "<circle r=\"4\" cx=%f cy=%f fill=%s></circle>",
                         x,
                         y,
                         color
