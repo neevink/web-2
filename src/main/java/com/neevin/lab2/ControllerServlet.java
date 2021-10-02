@@ -1,6 +1,9 @@
 package com.neevin.lab2;
 
+import com.neevin.lab2.helpers.HitChecker;
 import com.neevin.lab2.helpers.Validator;
+import com.neevin.lab2.models.HitResultModel;
+import com.neevin.lab2.models.ResultsModel;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -14,7 +17,7 @@ public class ControllerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.setAttribute("queryTime", new Date());
-        log("I WAS IN CONTROLLER");
+
         String xStr = request.getParameter("x");
         String yStr = request.getParameter("y");
         String rStr = request.getParameter("r");
@@ -27,10 +30,22 @@ public class ControllerServlet extends HttpServlet {
             int r = Integer.parseInt(rStr);
 
             if(!Validator.validateX(x) || !Validator.validateY(y) || !Validator.validateR(r)){
-                request.getRequestDispatcher("/badRequest").forward(request, response);
+                getServletContext().getRequestDispatcher("/badRequest.jsp").forward(request, response);
             }
 
+            ServletContext context = getServletContext();
+            ResultsModel results = (ResultsModel) context.getAttribute("results");
+
+            if(results == null){
+                results = new ResultsModel();
+            }
+            HitResultModel hitRes = new HitResultModel(x, y, r, HitChecker.checkHit(x, y, r));
+            results.addHit(hitRes);
+            context.setAttribute("results", results);
+
             // Тут делаем дела с числами
+            getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+
         }
         catch (Exception exc){
             getServletContext().getRequestDispatcher("/badRequest.jsp").forward(request, response);

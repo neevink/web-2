@@ -1,7 +1,7 @@
 <%@ page import="com.neevin.lab2.models.ResultsModel" %>
 <%@ page import="com.neevin.lab2.models.HitResultModel" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<jsp:useBean id="results" scope="session" class="com.neevin.lab2.models.ResultsModel"/>
+<jsp:useBean id="results" scope="application" class="com.neevin.lab2.models.ResultsModel"/>
 <!DOCTYPE html>
 <html lang="ru">
     <head>
