@@ -26,8 +26,7 @@ function validateX() {
     return false;
 }
 
-function validateY() {
-    let yNum = $('#y').val();
+function validateY(yNum) {
     if (isNumeric(yNum) && isInt(yNum) && minY <= yNum && yNum <= maxY) {
         y = yNum;
         return true;
@@ -45,15 +44,28 @@ function validateR() {
 }
 
 function validateForm(){
+    let yNum = $('#y').val();
     msg = '';
+
     if(!validateX()){
         msg += 'В поле X должно быть число от -3 до 3 с не более чем пятью знаками после запятой\n';
     }
-    if(!validateY()){
+    else{
+
+    }
+
+    if(!validateY(yNum)){
         msg += 'Должно быть выбрано значение поля Y\n';
     }
+    else{
+        y = yNum;
+    }
+
     if(!validateR()){
         msg += 'Должно быть выбрано значение поля R\n';
+    }
+    else{
+
     }
 
     if(msg !== ''){
@@ -80,12 +92,45 @@ document.getElementById("main-area").onmousedown = function submit(event) {
         rowY = maxY;
     }
 
+    alert(`${rowX} ${rowY}`);
+
     $('#x').val(rowX);
     $('#y').val(rowY);
 
-    // alert(`${rowX} ${rowY}`);
-
     if(validateForm()){
-        window.location.href = ADDRESS_URL + `?x=${x}&y=${y}&r=${r}`;
+        let request = $.ajax({
+                type: "GET",
+                url: "controller",
+                data: {
+                    "x": x,
+                    "y": y,
+                    "r": r
+                }
+            })
+            .done((data) => {
+                color = data.hit ? "#32CD32" : "#DC143C";
+
+                constantRadius = 110;
+                xVal = 150 + data.x / data.r * constantRadius;
+                yVal = 150 - data.y / data.r * constantRadius;
+
+                let svgns = "http://www.w3.org/2000/svg";
+
+                let newPoint= document.createElementNS(svgns, 'circle');
+                newPoint.setAttributeNS(null, 'cx', xVal);
+                newPoint.setAttributeNS(null, 'cy', yVal);
+                newPoint.setAttributeNS(null, 'r','4');
+                newPoint.setAttributeNS(null, 'fill', color);
+
+                var element = document.getElementById("main-area");
+
+                element.appendChild(newPoint);
+            })
+            .fail(() => {
+                alert( "error" );
+            })
+            .always(() => {
+                alert( "complete" );
+            });
     }
 }
