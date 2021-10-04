@@ -12,7 +12,7 @@ public class HitChecker {
             return (-x) + (-y) <= r/2;
         }
         else{ // 4 четверть
-            return x*x + y*y <= r/2;
+            return x*x + y*y <= r*r/4;
         }
     }
 }

@@ -1,5 +1,7 @@
 <%@ page import="com.neevin.lab2.models.ResultsModel" %>
 <%@ page import="com.neevin.lab2.models.HitResultModel" %>
+<%@ page import="com.neevin.lab2.helpers.HitChecker" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <jsp:useBean id="results" scope="application" class="com.neevin.lab2.models.ResultsModel"/>
 <!DOCTYPE html>
@@ -8,7 +10,6 @@
         <title>Неевин Кирилл</title>
         <meta charset="utf-8">
         <meta name="author" content="Kirill Neevin">
-        <title>Неевин Кирилл</title>
         <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/style.css">
     </head>
     <body>
@@ -62,30 +63,23 @@
 
             <!-- Рисуем точки -->
             <%
-                for (HitResultModel result: results.getHits()) {
+                for (int i = 0; i < results.getHits().size(); i++) {
+                    HitResultModel result = results.getHits().get(i);
 
-                String color;
-                if (result.getHit()){
-                    color = "#32CD32";
-                }
-                else{
-                    color = "#DC143C";
-                }
-
-                final int constantRadius = 110;
-                final float x = 150 + result.getX() / result.getR() * constantRadius;
-                final float y = 150 - result.getY() / result.getR() * constantRadius;
-                out.print(String.format(
-                        "<circle r=\"4\" cx=%f cy=%f fill=%s></circle>",
-                        x,
-                        y,
-                        color
-                ));
+                    final int constantRadius = 110;
+                    final float x = 150 + result.getX() / result.getR() * constantRadius;
+                    final float y = 150 - result.getY() / result.getR() * constantRadius;
+                    out.print(String.format(
+                            "<circle r=\"4\" cx=%f cy=%f fill=%s></circle>",
+                            x,
+                            y,
+                            result.getHit() ? "#32CD32" : "#DC143C"
+                    ));
             } %>
         </svg>
     </div>
 
-    <form id="main-form" action="<%=request.getContextPath()%>/controller" method="get" onsubmit="return validateForm()">
+    <form id="main-form" onsubmit="return false">
         <table id="main-table">
             <tr>
                 <th>Переменная</th>
@@ -129,10 +123,33 @@
             </tr>
         </table>
         <div class="input-pannel">
-            <input type="reset" value="Сбросить">
-            <input type="submit" value="отправить">
+            <input type="reset" value="сбросить">
+            <button onclick="handleSendButtonClick(this)">отправить</button>
         </div>
     </form>
+
+    <div id="results-table-wrapper">
+        <table id="results-table">
+            <tr>
+                <th>X</th>
+                <th>Y</th>
+                <th>R</th>
+                <th>Попадание</th>
+            </tr>
+            <!-- Рисуем точки -->
+            <%
+                List<HitResultModel> res = results.getHits();
+                for (int i = res.size() - 1; i >= 0; i--) {
+                    out.print(String.format(
+                            "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+                            res.get(i).getX(),
+                            res.get(i).getY(),
+                            Math.round(res.get(i).getR()),
+                            res.get(i).getHit() ? "✅" : "❌"
+                    ));
+                } %>
+        </table>
+    </div>
 
     <!-- Лень качать, поэтому буду загружать из инета -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

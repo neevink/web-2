@@ -7,8 +7,6 @@ public class ResultsModel {
     protected ArrayList<HitResultModel> results = new ArrayList<>();
 
     public ResultsModel(){
-        // results.add(new HitResultModel(1, 1, 1, true));
-        // results.add(new HitResultModel(-3, -2, 5, false));
     }
 
     public void addHit(HitResultModel hit){

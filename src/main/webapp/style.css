@@ -24,7 +24,12 @@ body{
 
 #main-table{
     margin: auto;
+}
 
+#results-table{
+    margin: 35px auto;
+    width: 50%;
+    text-align: center;
 }
 
 #main-table .inner-table{

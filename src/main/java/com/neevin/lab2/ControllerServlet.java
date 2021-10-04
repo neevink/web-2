@@ -27,11 +27,16 @@ public class ControllerServlet extends HttpServlet {
 
         try{
             float x = Float.parseFloat(xStr);
-            int y = Integer.parseInt(yStr);
-            int r = Integer.parseInt(rStr);
+            float y = Float.parseFloat(yStr);
+            float r = Float.parseFloat(rStr);
 
             if(!Validator.validateX(x) || !Validator.validateY(y) || !Validator.validateR(r)){
-                getServletContext().getRequestDispatcher("/badRequest.jsp").forward(request, response);
+                //getServletContext().getRequestDispatcher("/badRequest.jsp").forward(request, response);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                PrintWriter out = response.getWriter();
+                out.print("{\"errorMessage\": \"Ошибка валидации\"}");
+                return;
             }
 
             ServletContext context = getServletContext();
@@ -55,7 +60,12 @@ public class ControllerServlet extends HttpServlet {
 
         }
         catch (Exception exc){
-            getServletContext().getRequestDispatcher("/badRequest.jsp").forward(request, response);
+            //getServletContext().getRequestDispatcher("/badRequest.jsp").forward(request, response);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print("{\"errorMessage\": \"Ошибка валидации\"}");
+
         }
 
     }

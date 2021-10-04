@@ -1,8 +1,7 @@
-const ADDRESS_URL = 'http://localhost:8081/lab2-1.0-SNAPSHOT/controller';
 const minX = -3, maxX = 3;
 const minY = -5, maxY = 3;
 const minR = 1, maxR = 5;
-let x, y, r;
+var x = 0, y = 0, r = 0;
 
 function isNumeric(val) {
     return !isNaN(parseFloat(val)) && isFinite(val);
@@ -16,9 +15,7 @@ function isFloat(val){
     return /^-?[0-9]{0,6}(.|,)[0-9]{0,5}$/.test(val);
 }
 
-function validateX() {
-    let xField = $('#x');
-    let xNum = xField.val().replace(',', '.');
+function validateX(xNum) {
     if (isNumeric(xNum) && isFloat(xNum) && minX <= xNum && xNum <= maxX) {
         x = xNum;
         return true;
@@ -34,38 +31,25 @@ function validateY(yNum) {
     return false;
 }
 
-function validateR() {
-    let rNum = $('#r').val();
-    if (isNumeric(rNum) && isInt(rNum) && minR <= rNum && rNum <= maxR) {
-        r = rNum;
-        return true;
-    }
-    return false;
+function validateR(rNum) {
+    return !!(isNumeric(rNum) && isInt(rNum) && minR <= rNum && rNum <= maxR);
+
 }
 
 function validateForm(){
     let yNum = $('#y').val();
+    let xNum = $('#x').val().replace(',', '.');
+    let rNum = $('#r').val();
     msg = '';
 
-    if(!validateX()){
+    if(!validateX(xNum)){
         msg += 'В поле X должно быть число от -3 до 3 с не более чем пятью знаками после запятой\n';
     }
-    else{
-
-    }
-
     if(!validateY(yNum)){
         msg += 'Должно быть выбрано значение поля Y\n';
     }
-    else{
-        y = yNum;
-    }
-
-    if(!validateR()){
+    if(!validateR(rNum)){
         msg += 'Должно быть выбрано значение поля R\n';
-    }
-    else{
-
     }
 
     if(msg !== ''){
@@ -73,64 +57,78 @@ function validateForm(){
         return false;
     }
     else{
-        // alert('x = ' + x + ', y = ' + y + ',r = ' + r);
+        y = yNum;
+        x = xNum;
+        r = rNum;
+        //alert('x = ' + x + ', y = ' + y + ',r = ' + r);
         return true;
     }
 }
 
-document.getElementById("main-area").onmousedown = function submit(event) {
+function handleSendButtonClick(event){
+    if(validateForm()){
+        addNewPoint(x, y, r);
+    }
+}
+
+document.getElementById("main-area").onmousedown = function(event){
+    /*
+        При нажатии по области мы не будем валидировать выбнаны ли какие-то поля, кроме R
+    */
     const areaSize = 300, radius = 110;
     const selectedRadius = parseFloat($('#r').val());
 
-    let rowX = ((event.offsetX - areaSize/2) / radius * selectedRadius).toFixed(5);
-    let rowY = Math.round((areaSize/2 - event.offsetY) / radius * selectedRadius);
-
-    if(rowY < minY){
-        rowY = minY;
-    }
-    else if(rowY > maxY){
-        rowY = maxY;
+    if(!validateR(selectedRadius)){
+        alert('Не выбрано значение R!');
     }
 
-    alert(`${rowX} ${rowY}`);
+    let rowX = ((event.offsetX - areaSize/2) / radius * selectedRadius).toFixed(3);
+    let rowY = ((areaSize/2 - event.offsetY) / radius * selectedRadius).toFixed(3);
 
-    $('#x').val(rowX);
-    $('#y').val(rowY);
+    //alert(`${rowX} ${rowY}`);
+    addNewPoint(rowX, rowY, selectedRadius);
+}
 
-    if(validateForm()){
-        let request = $.ajax({
-                type: "GET",
-                url: "controller",
-                data: {
-                    "x": x,
-                    "y": y,
-                    "r": r
-                }
-            })
-            .done((data) => {
-                color = data.hit ? "#32CD32" : "#DC143C";
+function addNewPoint(x, y, r){
+    let request = $.ajax({
+        type: 'GET',
+        url: 'controller',
+        data: {
+            'x': x,
+            'y': y,
+            'r': r
+        }
+        })
+        .done((data) => {
+            if(data.errorMessage === undefined){
+                // Добавляем точку
+                const color = data.hit ? "#32CD32" : "#DC143C";
 
-                constantRadius = 110;
-                xVal = 150 + data.x / data.r * constantRadius;
-                yVal = 150 - data.y / data.r * constantRadius;
+                const constantRadius = 110;
+                const xVal = 150 + data.x / data.r * constantRadius;
+                const yVal = 150 - data.y / data.r * constantRadius;
 
-                let svgns = "http://www.w3.org/2000/svg";
-
-                let newPoint= document.createElementNS(svgns, 'circle');
+                const svgns = 'http://www.w3.org/2000/svg';
+                let newPoint = document.createElementNS(svgns, 'circle');
                 newPoint.setAttributeNS(null, 'cx', xVal);
                 newPoint.setAttributeNS(null, 'cy', yVal);
                 newPoint.setAttributeNS(null, 'r','4');
                 newPoint.setAttributeNS(null, 'fill', color);
 
-                var element = document.getElementById("main-area");
+                document.getElementById('main-area').appendChild(newPoint);
 
-                element.appendChild(newPoint);
-            })
-            .fail(() => {
-                alert( "error" );
-            })
-            .always(() => {
-                alert( "complete" );
-            });
-    }
+                // Добавляем строчку в таблицу
+                let row = document.getElementById('results-table').insertRow(1);
+                row.insertCell(0).innerHTML = `${data.hit ? '✅' : '❌'}`
+                row.insertCell(0).innerHTML = `${data.r}`
+                row.insertCell(0).innerHTML = `${data.y}`
+                row.insertCell(0).innerHTML = `${data.x}`
+            }
+            else{
+                alert(data.errorMessage);
+            }
+        })
+        .fail(() => {
+            alert('Не удалось подключиться к серверу!');
+        });
 }
