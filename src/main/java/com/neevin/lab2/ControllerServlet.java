@@ -15,63 +15,25 @@ import java.util.Date;
 @WebServlet(name = "ControllerServlet", value = "/controller")
 public class ControllerServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log("Прилетел запрос в контроллер");
+        if (request.getMethod().equals("DELETE")) {
+            log("Запрос на очистку сохранений");
+            request.getRequestDispatcher("/clear").forward(request, response);
+        }
+
         HttpSession session = request.getSession();
         session.setAttribute("queryTime", new Date());
 
-        String xStr = request.getParameter("x");
-        String yStr = request.getParameter("y");
-        String rStr = request.getParameter("r");
+        String x = request.getParameter("x");
+        String y = request.getParameter("y");
+        String r = request.getParameter("r");
 
-        log(String.format("x = %s, y = %s, r = %s", xStr, yStr, rStr));
-
-        try{
-            float x = Float.parseFloat(xStr);
-            float y = Float.parseFloat(yStr);
-            float r = Float.parseFloat(rStr);
-
-            if(!Validator.validateX(x) || !Validator.validateY(y) || !Validator.validateR(r)){
-                //getServletContext().getRequestDispatcher("/badRequest.jsp").forward(request, response);
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                PrintWriter out = response.getWriter();
-                out.print("{\"errorMessage\": \"Ошибка валидации\"}");
-                return;
-            }
-
-            ServletContext context = getServletContext();
-            ResultsModel results = (ResultsModel) context.getAttribute("results");
-
-            if(results == null){
-                results = new ResultsModel();
-            }
-            HitResultModel hitRes = new HitResultModel(x, y, r, HitChecker.checkHit(x, y, r));
-            results.addHit(hitRes);
-            context.setAttribute("results", results);
-
-            // Тут делаем дела с числами
-            //getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
-
-
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            PrintWriter out = response.getWriter();
-            out.print(String.format("{\"x\": %s, \"y\": %s, \"r\": %s, \"hit\": %s}", hitRes.getX(), hitRes.getY(), hitRes.getR(), hitRes.getHit()));
-
+        if(x == null || y == null || r == null) {
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
-        catch (Exception exc){
-            //getServletContext().getRequestDispatcher("/badRequest.jsp").forward(request, response);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            PrintWriter out = response.getWriter();
-            out.print("{\"errorMessage\": \"Ошибка валидации\"}");
-
+        else {
+            request.getRequestDispatcher("/check").forward(request, response);
         }
-
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 }

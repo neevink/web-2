@@ -72,9 +72,7 @@ function handleSendButtonClick(event){
 }
 
 document.getElementById("main-area").onmousedown = function(event){
-    /*
-        При нажатии по области мы не будем валидировать выбнаны ли какие-то поля, кроме R
-    */
+    /* При нажатии по области мы не будем валидировать выбнаны ли какие-то поля, кроме R */
     const areaSize = 300, radius = 110;
     const selectedRadius = parseFloat($('#r').val());
 
