@@ -70,9 +70,9 @@
                     final float x = 150 + result.getX() / result.getR() * constantRadius;
                     final float y = 150 - result.getY() / result.getR() * constantRadius;
                     out.print(String.format(
-                            "<circle r=\"4\" cx=%f cy=%f fill=%s></circle>",
-                            x,
-                            y,
+                            "<circle r=\"4\" cx=%s cy=%s fill=%s></circle>",
+                            Float.toString(x).replaceAll(",", "."),
+                            Float.toString(y).replaceAll(",", "."),
                             result.getHit() ? "#32CD32" : "#DC143C"
                     ));
             } %>
@@ -141,7 +141,7 @@
                 List<HitResultModel> res = results.getHits();
                 for (int i = res.size() - 1; i >= 0; i--) {
                     out.print(String.format(
-                            "<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>",
+                            "<tr><td>%.3f</td><td>%.3f</td><td>%d</td><td>%s</td></tr>",
                             res.get(i).getX(),
                             res.get(i).getY(),
                             Math.round(res.get(i).getR()),

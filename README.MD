@@ -8,7 +8,9 @@
 ![3 картинка задания](task/task3.png "3 картинка задания")
 
 
-Запустить `wildfly` сервис:
+Прокинуть порт:
 ```shell
-sudo systemctl start wildfly
+ssh -L 8098:localhost:8098 s313087@helios.se.ifmo.ru -p 2222
 ```
+
+Сайт доступен по адресу: `http://localhost:8098/lab2_war/`
